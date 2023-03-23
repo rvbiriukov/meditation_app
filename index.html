@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Медитация</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #3a3a3a 0%, #141414 100%);
+            color: #f0f0f0;
+        }
+
+        #circle-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin-bottom: 20px;
+        }
+
+        #circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #6bbcff 0%, #3a7bd5 100%);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            transform: translate(-50%, -50%);
+        }
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #b2dcff;
+            box-shadow: 0 0 5px #92ceff;
+            animation: move 3s linear infinite;
+            transform-origin: 50% 200%;
+        }
+
+        #instruction {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        #controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input {
+            width: 60px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            padding: 4px;
+        }
+
+        button {
+            background-color: #007aff;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 8px 16px;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #0065d5;
+        }
+
+        button:active {
+            background-color: #0053b2;
+        }
+
+        @keyframes move {
+            0% {
+                transform: scale(0) translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: scale(1) translateY(-100%) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+  <div id="circle-container">
+      <div id="circle">
+          <div class="particle" style="top: 30%; left: 42%; animation-delay: -0.3s;"></div>
+          <div class="particle" style="top: 30%; left: 42%; animation-delay: -0.6s;"></div>
+          <div class="particle" style="top: 30%; left: 42%; animation-delay: -0.9s;"></div>
+          <div class="particle" style="top: 30%; left: 42%; animation-delay: -1.2s;"></div>
+          <div class="particle" style="top: 30%; left: 42%; animation-delay: -1.5s; transform-origin: 50% 300%;"></div>
+          <div class="particle" style="top: 30%; left: 42%; animation-delay: -1.8s; transform-origin: 50% 300%;"></div>
+          <div class="particle" style="top: 30%; left: 42%; animation-delay: -2.1s; transform-origin: 50% 300%;"></div>
+          <div class="particle" style="top: 30%; left: 42%; animation-delay: -2.4s; transform-origin: 50% 300%;"></div>
+      </div>
+  </div>
+  <div id="instruction"></div>
+  <div id="controls">
+      <label>
+          Вдох (сек)
+          <input type="number" id="inhale" value="4">
+      </label>
+      <label>
+          Задержка (сек)
+          <input type="number" id="inhalePause" value="4">
+      </label>
+      <label>
+          Выдох (сек)
+          <input type="number" id="exhale" value="4">
+      </label>
+      <label>
+          Задержка (сек)
+          <input type="number" id="exhalePause" value="4">
+      </label>
+  </div>
+  <button id="start" style="margin-top: 10px;">Старт</button>
+  <button id="stop" style="margin-top: 10px;">Стоп</button>
+    <script>
+      const circle = document.getElementById("circle");
+      const instruction = document.getElementById("instruction");
+      const inhaleInput = document.getElementById("inhale");
+      const inhalePauseInput = document.getElementById("inhalePause");
+      const exhaleInput = document.getElementById("exhale");
+      const exhalePauseInput = document.getElementById("exhalePause");
+      const startButton = document.getElementById("start");
+      const stopButton = document.getElementById("stop");
+  
+      let currentAnimation = null;
+      let stopAnimationFlag = false;
+  
+      function animateInhale() {
+          instruction.innerText = "Вдыхайте";
+          return circle.animate([
+              { width: "100px", height: "100px" },
+              { width: "200px", height: "200px" }
+          ], {
+              duration: inhaleInput.value * 1000,
+              easing: "linear",
+              fill: "forwards"
+          });
+      }
+  
+      function animateExhale() {
+          instruction.innerText = "Выдыхайте";
+          return circle.animate([
+              { width: "200px", height: "200px" },
+              { width: "100px", height: "100px" }
+          ], {
+              duration: exhaleInput.value * 1000,
+              easing: "linear",
+              fill: "forwards"
+          });
+      }
+  
+      async function startAnimation() {
+          stopAnimationFlag = false;
+  
+          while (!stopAnimationFlag) {
+              currentAnimation = animateInhale();
+              await currentAnimation.finished;
+              if (stopAnimationFlag) break;
+  
+              instruction.innerText = "Задержите дыхание";
+              await sleep(inhalePauseInput.value * 1000);
+              if (stopAnimationFlag) break;
+  
+              currentAnimation = animateExhale();
+              await currentAnimation.finished;
+              if (stopAnimationFlag) break;
+  
+              instruction.innerText = "";
+              await sleep(exhalePauseInput.value * 1000);
+          }
+      }
+  
+      function stopAnimation() {
+          stopAnimationFlag = true;
+          if (currentAnimation) {
+              currentAnimation.cancel();
+          }
+          circle.style.width = "100px";
+          circle.style.height = "100px";
+          instruction.innerText = "";
+      }
+  
+      function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+      }
+  
+      startButton.addEventListener("click", () => {
+          stopAnimation();
+          startAnimation();
+      });
+  
+      stopButton.addEventListener("click", stopAnimation);
+  </script>
+
+</body>
+</html>
