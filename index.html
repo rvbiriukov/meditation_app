@@ -14,9 +14,23 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(135deg, #3a3a3a 0%, #141414 100%);
+            background: radial-gradient(circle at center, #626262, #000);
+            animation: breathe 10s ease-in-out infinite;
+            background-position: 50% 50%;
             color: #f0f0f0;
         }
+
+        @keyframes breathe {
+    0% {
+      background-size: 100% 100%;
+    }
+    50% {
+      background-size: 130% 130%;
+    }
+    100% {
+      background-size: 100% 100%;
+    }
+  }
 
         #circle-container {
             position: relative;
@@ -37,16 +51,6 @@
             transform: translate(-50%, -50%);
         }
 
-        .particle {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #b2dcff;
-            box-shadow: 0 0 5px #92ceff;
-            animation: move 3s linear infinite;
-            transform-origin: 50% 200%;
-        }
 
         #instruction {
             font-size: 20px;
@@ -95,27 +99,11 @@
             background-color: #0053b2;
         }
 
-        @keyframes move {
-            0% {
-                transform: scale(0) translateY(0) rotate(0deg);
-            }
-            100% {
-                transform: scale(1) translateY(-100%) rotate(360deg);
-            }
-        }
     </style>
 </head>
 <body>
   <div id="circle-container">
       <div id="circle">
-          <div class="particle" style="top: 30%; left: 42%; animation-delay: -0.3s;"></div>
-          <div class="particle" style="top: 30%; left: 42%; animation-delay: -0.6s;"></div>
-          <div class="particle" style="top: 30%; left: 42%; animation-delay: -0.9s;"></div>
-          <div class="particle" style="top: 30%; left: 42%; animation-delay: -1.2s;"></div>
-          <div class="particle" style="top: 30%; left: 42%; animation-delay: -1.5s; transform-origin: 50% 300%;"></div>
-          <div class="particle" style="top: 30%; left: 42%; animation-delay: -1.8s; transform-origin: 50% 300%;"></div>
-          <div class="particle" style="top: 30%; left: 42%; animation-delay: -2.1s; transform-origin: 50% 300%;"></div>
-          <div class="particle" style="top: 30%; left: 42%; animation-delay: -2.4s; transform-origin: 50% 300%;"></div>
       </div>
   </div>
   <div id="instruction"></div>
